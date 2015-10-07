@@ -7,7 +7,10 @@
 //
 
 #import "SLKTextViewController.h"
+#import "QuoteView.h"
 
 @interface MessageViewController : SLKTextViewController
+
+@property (nonatomic, strong) QuoteView *quoteView;
 
 @end

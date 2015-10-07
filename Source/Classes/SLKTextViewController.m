@@ -54,7 +54,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
 @property (nonatomic, assign, getter = isMovingKeyboard) BOOL movingKeyboard;
 
 // The current keyboard status (hidden, showing, etc.)
-@property (nonatomic) SLKKeyboardStatus keyboardStatus;
+//@property (nonatomic) SLKKeyboardStatus keyboardStatus;
 
 // YES if a new word has been typed recently
 @property (nonatomic) BOOL newWordInserted;
@@ -395,6 +395,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     CGFloat keyboardMinY = CGRectGetMinY(keyboardRect);
     
     CGFloat keyboardHeight = MAX(0.0, viewHeight - keyboardMinY);
+    self.keyboardHeight = keyboardHeight;
     
     return keyboardHeight;
 }
@@ -541,6 +542,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     _keyboardStatus = status;
+    self.keyboardStatus = status;
     
     [self didChangeKeyboardStatus:status];
     
@@ -698,6 +700,15 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // Clears cache
     [self clearCachedText];
 }
+
+// edit 3
+- (void)quoteMessageOfUsername:(NSString *)username andText:(NSString *)text
+{
+    //self.keyboardStatus
+    
+    
+}
+//
 
 - (void)editText:(NSString *)text
 {
@@ -1073,6 +1084,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     }
     
     CGFloat keyboardHeight = CGRectGetHeight(endFrame);
+    self.keyboardHeight = keyboardHeight;
     
     beginFrame.size.height = keyboardHeight;
     endFrame.size.height = keyboardHeight;

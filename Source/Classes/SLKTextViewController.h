@@ -98,6 +98,10 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
 @property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
 
+/** */
+@property (nonatomic) SLKKeyboardStatus keyboardStatus;
+@property (nonatomic) CGFloat keyboardHeight;
+
 /**
  YES if the main table view is inverted. Default is YES.
  This allows the table view to start from the bottom like any typical messaging interface.
@@ -346,6 +350,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param text The string text to edit.
  */
 - (void)editText:(NSString *)text NS_REQUIRES_SUPER;
+
+/** */
+- (void)quoteMessageOfUsername:(NSString *)username andText:(NSString *)text;
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Return key.

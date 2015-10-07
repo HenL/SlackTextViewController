@@ -212,6 +212,13 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
             [self editCellMessage:gesture];
         }]];
         
+        // edit 1
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Quote" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self quoteCellMessage:gesture];
+        }]];
+        //
+        
         [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:NULL]];
         
         [self.navigationController presentViewController:alertController animated:YES completion:nil];
@@ -223,6 +230,39 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     [self editCellMessage:gesture];
 #endif
 }
+
+// edit 2
+- (void)quoteCellMessage:(UIGestureRecognizer *)gesture
+{
+    MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
+    Message *message = self.messages[cell.indexPath.row];
+    
+    [self quoteMessageOfUsername:message.username andText:message.text];
+    
+    [self.tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+//
+
+// edit 3
+- (void)quoteMessageOfUsername:(NSString *)username andText:(NSString *)text
+{
+    if(self.quoteView)
+    {
+        [self.quoteView updateWithUsername:username andText:text];
+    }
+    else
+    {
+        self.quoteView = [[QuoteView alloc] initWithUsername:username
+                                                     andText:text
+                                              keyboardStatus:self.keyboardStatus
+                                              keyboardHeight:self.keyboardHeight
+                                               andViewHeight:90.0];
+        [self.view addSubview:self.quoteView];
+    }
+    
+    [self.quoteView animateShowOrHideView];
+}
+//
 
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
 {
