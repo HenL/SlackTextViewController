@@ -10,6 +10,8 @@
 #import <Foundation/Foundation.h>
 #import "SLKTextViewController.h"
 
+static CGFloat kAnimationDuration = 0.3;
+
 @protocol CustomViewDelegate <NSObject>
 
 - (void)doneAnimateShowOrHideView:(UIView *)view;

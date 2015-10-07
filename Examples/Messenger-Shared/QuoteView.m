@@ -62,7 +62,7 @@
 - (void)addQuoteTextView
 {
     UIFont *textViewFont = [UIFont fontWithName:@"Helvetica" size:13.0];
-    CGSize textViewMinSize = CGSizeMake(self.frame.size.width - kSubviewMargin*2, 30.0);
+    CGSize textViewMinSize = CGSizeMake(self.frame.size.width - kSubviewMargin*2, 40.0);
 
     CGRect expectedRect = [self.text boundingRectWithSize:textViewMinSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textViewFont} context:nil];
 
@@ -75,6 +75,7 @@
     self.quoteTextView = [[UITextView alloc] initWithFrame:CGRectMake(kSubviewMargin, self.usernameLabel.frame.origin.y + self.usernameLabel.frame.size.height, expectedRect.size.width, expectedRect.size.height)];
     self.quoteTextView.text = self.text;
     self.quoteTextView.textColor = [UIColor lightTextColor];
+    self.quoteTextView.backgroundColor = [UIColor clearColor];
     self.quoteTextView.font = textViewFont;
     self.quoteTextView.editable = NO;
     [self addSubview:self.quoteTextView];

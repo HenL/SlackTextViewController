@@ -27,23 +27,35 @@
 
 - (void)animateShowOrHideView
 {
-    self.startY = self.superview.frame.origin.y + self.superview.frame.size.height;
-    CGFloat y = self.hidden ? self.startY - self.keyboardHeight - self.viewHeight : self.startY;
+    CGRect superviewRect = self.superview.frame;
+    self.startY = superviewRect.origin.y + superviewRect.size.height;
     
-    if(self.hidden)
+    CGFloat y = !self.hidden ? self.startY - self.keyboardHeight - self.viewHeight : self.startY;
+    self.frame = CGRectMake(superviewRect.origin.x, y, superviewRect.size.width, self.viewHeight);
+    
+    y = self.hidden ? self.startY - self.keyboardHeight - self.viewHeight : self.startY;
+    
+    if (self.hidden)
+    {
         self.hidden = NO;
+    }
     
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:kAnimationDuration animations:^{
+        
         self.alpha = 1.0;
-        self.frame = CGRectMake(self.superview.frame.origin.x, y, self.superview.frame.size.width, self.viewHeight);
+        self.frame = CGRectMake(self.frame.origin.x, y, self.frame.size.width, self.viewHeight);
         
     } completion:^(BOOL finished) {
         
-        if(y == self.startY)
+        if (y == self.startY)
+        {
             self.hidden = YES;
+        }
         
-        if(self.delegate && [self.delegate respondsToSelector:@selector(doneAnimateShowOrHideView:)])
+        if (self.delegate && [self.delegate respondsToSelector:@selector(doneAnimateShowOrHideView:)])
+        {
             [self.delegate doneAnimateShowOrHideView:self];
+        }
     }];
 }
 

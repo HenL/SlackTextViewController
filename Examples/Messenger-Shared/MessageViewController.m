@@ -256,7 +256,7 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
                                                      andText:text
                                               keyboardStatus:self.keyboardStatus
                                               keyboardHeight:self.keyboardHeight
-                                               andViewHeight:90.0];
+                                               andViewHeight:100.0];
         [self.view addSubview:self.quoteView];
     }
     
