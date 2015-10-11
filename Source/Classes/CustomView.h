@@ -8,23 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "SLKTextViewController.h"
+
+@class SLKTextViewController;
 
 static CGFloat kAnimationDuration = 0.3;
 
-@protocol CustomViewDelegate <NSObject>
-
-- (void)doneAnimateShowOrHideView:(UIView *)view;
-
-@end
-
 @interface CustomView : UIView
-
-@property (nonatomic) SLKKeyboardStatus keyboardStatus;
-@property (nonatomic) CGFloat keyboardHeight, startY, viewHeight;
-@property (nonatomic, weak) id<CustomViewDelegate> delegate;
-
-- (id)initWithKeyboardStatus:(SLKKeyboardStatus)keyboardStatus keyboardHeight:(CGFloat)keyboardHeight andViewHeight:(CGFloat)viewHeight;
-- (void)animateShowOrHideView;
-
+@property (nonatomic) BOOL presented;
 @end

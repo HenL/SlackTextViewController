@@ -8,77 +8,103 @@
 
 #import "QuoteView.h"
 
+@interface QuoteView ()
+
+@property (nonatomic, strong) UILabel *usernameLabel;
+@property (nonatomic, strong) UITextView *quoteTextView;
+@property (nonatomic, strong) UIButton *cancelButton;
+
+@end
+
 @implementation QuoteView
 
-- (id)initWithUsername:(NSString *)username
-               andText:(NSString *)text
-        keyboardStatus:(SLKKeyboardStatus)keyboardStatus
-        keyboardHeight:(CGFloat)keyboardHeight
-         andViewHeight:(CGFloat)viewHeight
+- (instancetype)init
 {
-    if (self = [super initWithKeyboardStatus:keyboardStatus
-                              keyboardHeight:keyboardHeight
-                               andViewHeight:viewHeight])
+    if (self = [super init])
     {
-        [self updateWithUsername:username andText:text];
     }
     return self;
 }
 
-- (void)updateWithUsername:(NSString *)username andText:(NSString *)text
+- (void)didMoveToSuperview
 {
-    self.username = username;
-    self.text = text;
-    
-    [self setupSubviews];
+    self.backgroundColor = [UIColor lightGrayColor];
+    [self addCancelButton];
 }
 
-- (void)setupSubviews
+- (void)setUsername:(NSString *)username
 {
-    [self addUsernameLabel];
-    [self addQuoteTextView];
+    _username = username;
+    self.usernameLabel.text = username;
 }
 
-- (void)addUsernameLabel
+- (void)setText:(NSString *)text
 {
-    UIFont *labelFont = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]];
-    CGSize labelMinSize = CGSizeMake(self.frame.size.width - kSubviewMargin*2, 20.0);
+    _text = text;
+    self.quoteTextView.text = text;
+}
 
-    CGRect expectedRect = [self.username boundingRectWithSize:labelMinSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:labelFont} context:nil];
-
-    if(self.usernameLabel)
+- (UILabel *)usernameLabel
+{
+    if (!_usernameLabel)
     {
-        [self.usernameLabel removeFromSuperview];
-        self.usernameLabel = nil;
+        UIFont *labelFont = [UIFont fontWithName:@"Helvetica" size:[UIFont labelFontSize]];
+        
+        CGRect expectedRect = [self.username boundingRectWithSize:[self minLabelSize] options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:labelFont} context:nil];
+        
+        _usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSubviewMargin, kSubviewMargin + kSubviewMargin/2, expectedRect.size.width, expectedRect.size.height)];
+        _usernameLabel.text = self.username;
+        _usernameLabel.textColor = [UIColor blackColor];
+        _usernameLabel.font = labelFont;
+        [self addSubview:_usernameLabel];
     }
-    
-    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSubviewMargin, kSubviewMargin, expectedRect.size.width, expectedRect.size.height)];
-    self.usernameLabel.text = self.username;
-    self.usernameLabel.textColor = [UIColor darkGrayColor];
-    self.usernameLabel.font = labelFont;
-    [self addSubview:self.usernameLabel];
+    else
+    {
+        CGRect expectedRect = [self.username boundingRectWithSize:[self minLabelSize] options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:_usernameLabel.font} context:nil];
+        _usernameLabel.frame = CGRectMake(_usernameLabel.frame.origin.x, _usernameLabel.frame.origin.y, expectedRect.size.width, expectedRect.size.height);
+        
+    }
+    return _usernameLabel;
 }
 
-- (void)addQuoteTextView
+- (UITextView *)quoteTextView
 {
-    UIFont *textViewFont = [UIFont fontWithName:@"Helvetica" size:13.0];
-    CGSize textViewMinSize = CGSizeMake(self.frame.size.width - kSubviewMargin*2, 40.0);
-
-    CGRect expectedRect = [self.text boundingRectWithSize:textViewMinSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textViewFont} context:nil];
-
-    if(self.quoteTextView)
+    if (!_quoteTextView)
     {
-        [self.quoteTextView removeFromSuperview];
-        self.quoteTextView = nil;
+        _quoteTextView = [[UITextView alloc] initWithFrame:CGRectMake(kSubviewMargin, self.usernameLabel.frame.origin.y + self.usernameLabel.frame.size.height, self.frame.size.width - kSubviewMargin*2, kTextViewHeight)];
+        _quoteTextView.text = self.text;
+        _quoteTextView.textColor = [UIColor lightTextColor];
+        _quoteTextView.backgroundColor = [UIColor clearColor];
+        _quoteTextView.font = [UIFont fontWithName:@"Helvetica" size:13.0];
+        _quoteTextView.editable = NO;
+        _quoteTextView.textContainer.maximumNumberOfLines = kMaxTextViewNumOfLines;
+        _quoteTextView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
+        [self addSubview:_quoteTextView];
+
     }
-    
-    self.quoteTextView = [[UITextView alloc] initWithFrame:CGRectMake(kSubviewMargin, self.usernameLabel.frame.origin.y + self.usernameLabel.frame.size.height, expectedRect.size.width, expectedRect.size.height)];
-    self.quoteTextView.text = self.text;
-    self.quoteTextView.textColor = [UIColor lightTextColor];
-    self.quoteTextView.backgroundColor = [UIColor clearColor];
-    self.quoteTextView.font = textViewFont;
-    self.quoteTextView.editable = NO;
-    [self addSubview:self.quoteTextView];
+    return _quoteTextView;
+}
+
+- (void)addCancelButton
+{
+    self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.cancelButton setFrame:CGRectMake(0, 0, kCancelButtonWidth, kSubviewMargin)];
+    [self.cancelButton setTitle:@"x" forState:UIControlStateNormal];
+    [self.cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.cancelButton addTarget:self action:@selector(cancelDidTap:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.cancelButton];
+}
+
+- (CGSize)minLabelSize
+{
+    return CGSizeMake(self.frame.size.width - kSubviewMargin*2, kSubviewMargin);
+}
+
+#pragma mark - Events
+
+- (void)cancelDidTap:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLKHideCustomView object:nil];
 }
 
 @end

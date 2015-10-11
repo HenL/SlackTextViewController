@@ -11,6 +11,6 @@
 
 @interface MessageViewController : SLKTextViewController
 
-@property (nonatomic, strong) QuoteView *quoteView;
+@property (nonatomic, weak) QuoteView *quoteView;
 
 @end

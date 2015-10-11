@@ -17,6 +17,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "CustomView.h"
+
 #import "SLKTextInputbar.h"
 #import "SLKTextView.h"
 #import "SLKTypingIndicatorView.h"
@@ -38,6 +40,8 @@ UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
 UIKIT_EXTERN NSString *const SLKTextInputbarDidMoveNotification;
+
+NSString * const SLKHideCustomView;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
@@ -180,6 +184,21 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 + (UICollectionViewLayout *)collectionViewLayoutForCoder:(NSCoder *)decoder;
 
 
+#pragma mark - Custom View 
+
+@property (nonatomic, strong) CustomView *customView;
+
+/**
+ Returns a custom height for the custom view. Default is 0.0.
+ You can override this method to return a custom height.
+ 
+ @return The custom view's height.
+ */
+- (CGFloat)heightForCustomView;
+
+- (void)slk_showOrHideCustomView:(BOOL)showIt animated:(BOOL)animated;
+
+
 #pragma mark - Keyboard Handling
 ///------------------------------------------------
 /// @name Keyboard Handling
@@ -316,7 +335,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
 
-
 #pragma mark - Text Input Bar Adjustment
 ///------------------------------------------------
 /// @name Text Input Bar Adjustment
@@ -350,9 +368,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param text The string text to edit.
  */
 - (void)editText:(NSString *)text NS_REQUIRES_SUPER;
-
-/** */
-- (void)quoteMessageOfUsername:(NSString *)username andText:(NSString *)text;
 
 /**
  Notifies the view controller when the editing bar's right button's action has been triggered, manually or by using the external keyboard's Return key.
@@ -496,6 +511,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param aClass A UIView subclass conforming to the SLKTypingIndicatorProtocol.
  */
 - (void)registerClassForTypingIndicatorView:(Class)aClass;
+
+/**
+ Registers a class for customizing the behaviour and appearance of the custom view
+ 
+ @param aClass A CustomView subclass
+ */
+- (void)registerClassForCustomView:(Class)aClass;
 
 
 #pragma mark - Delegate Methods Requiring Super

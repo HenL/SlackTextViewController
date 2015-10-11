@@ -70,6 +70,10 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     // Register a UIView subclass, conforming to SLKTypingIndicatorProtocol, to use a custom typing indicator view.
     [self registerClassForTypingIndicatorView:[TypingIndicatorView class]];
 #endif
+    
+    
+    // Register a CustomView subclass.
+    [self registerClassForCustomView:[QuoteView class]];
 }
 
 
@@ -149,6 +153,9 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     [self.autoCompletionView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:AutoCompletionCellIdentifier];
     [self registerPrefixesForAutoCompletion:@[@"@", @"#", @":", @"+:"]];
+    
+    // custom view
+    self.quoteView = (QuoteView *)self.customView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -231,7 +238,6 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 #endif
 }
 
-// edit 2
 - (void)quoteCellMessage:(UIGestureRecognizer *)gesture
 {
     MessageTableViewCell *cell = (MessageTableViewCell *)gesture.view;
@@ -241,28 +247,14 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
     
     [self.tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
-//
 
-// edit 3
 - (void)quoteMessageOfUsername:(NSString *)username andText:(NSString *)text
 {
-    if(self.quoteView)
-    {
-        [self.quoteView updateWithUsername:username andText:text];
-    }
-    else
-    {
-        self.quoteView = [[QuoteView alloc] initWithUsername:username
-                                                     andText:text
-                                              keyboardStatus:self.keyboardStatus
-                                              keyboardHeight:self.keyboardHeight
-                                               andViewHeight:100.0];
-        [self.view addSubview:self.quoteView];
-    }
+    self.quoteView.username = username;
+    self.quoteView.text = text;
     
-    [self.quoteView animateShowOrHideView];
+    [self slk_showOrHideCustomView:YES animated:NO];
 }
-//
 
 - (void)editCellMessage:(UIGestureRecognizer *)gesture
 {
@@ -528,6 +520,11 @@ static NSString *AutoCompletionCellIdentifier = @"AutoCompletionCell";
 {
     CGFloat cellHeight = [self.autoCompletionView.delegate tableView:self.autoCompletionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     return cellHeight*self.searchResult.count;
+}
+
+- (CGFloat)heightForCustomView
+{
+    return kQuoteViewHeight;
 }
 
 

@@ -297,10 +297,10 @@
 				4F7C6BA41A6E208E006E3FAB /* MessageTextView.m */,
 				4FF04E571B3F7A04004C3BED /* TypingIndicatorView.h */,
 				4FF04E581B3F7A04004C3BED /* TypingIndicatorView.m */,
-				4F8ADA751A68C37400023752 /* Message.h */,
-				4F8ADA761A68C37400023752 /* Message.m */,
 				5ADFC8731BC5522300226AE1 /* QuoteView.h */,
 				5ADFC8741BC5522300226AE1 /* QuoteView.m */,
+				4F8ADA751A68C37400023752 /* Message.h */,
+				4F8ADA761A68C37400023752 /* Message.m */,
 				4F86BF8E19F01234007A3D4A /* Images.xcassets */,
 				4F86BFE719F05519007A3D4A /* Bridge-Header.h */,
 			);
